@@ -1,0 +1,37 @@
+<!-- src/app/certificate/certificate.component.html -->
+<div class="cert-container">
+  <h2 class="title">Available Certificates</h2>
+
+  <div *ngIf="loading">Loading…</div>
+  <div *ngIf="!loading && loadError" class="error">{{ loadError }}</div>
+
+  <div class="card-container" *ngIf="!loading && certificates.length > 0; else noCerts">
+    <div class="cert-card" *ngFor="let cert of certificates">
+      <h3>{{ cert.name }}</h3>
+      <p>{{ cert.description }}</p>
+
+      <!-- Preferred: routerLink, so routing happens even if click handler fails -->
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        [routerLink]="['/quiz', cert.id]"
+      >
+        Start Quiz
+      </button>
+
+      <!-- Alternative (programmatic):
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="goToQuiz(cert.id)"
+      >
+        Start Quiz
+      </button>
+      -->
+    </div>
+  </div>
+
+  <ng-template #noCerts>
+    <p>No certificates found.</p>
+  </ng-template>
+</div>

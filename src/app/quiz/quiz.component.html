@@ -1,0 +1,72 @@
+<!-- src/app/quiz/quiz.component.html -->
+
+<!-- Result view -->
+<div class="result" *ngIf="result; else quizView">
+  <h2>Résultat</h2>
+  <p>Questions : {{ result?.totalQuestions }}</p>
+  <p>Points : {{ result?.score }} / {{ result?.totalMarks }}</p>
+  <p class="status" [class.pass]="result?.passed" [class.fail]="!result?.passed">
+    {{ result?.passed ? '✅ Succès' : '❌ Échec' }}
+  </p>
+
+  <div class="actions" style="justify-content:center; gap:.75rem;">
+    <button class="btn btn-outline-primary" (click)="resetQuiz()">Recommencer</button>
+    <a class="btn btn-secondary" routerLink="/certificates">Retour aux certificats</a>
+  </div>
+</div>
+
+<!-- Quiz view -->
+<ng-template #quizView>
+  <div class="quiz-wrap" *ngIf="(questions?.length ?? 0) > 0; else loadingOrError">
+
+    <header class="quiz-header">
+      <h2>Quiz</h2>
+      <div class="timer" [class.low]="remainingSeconds <= 30" aria-live="polite">
+        ⏳ {{ formatTime(remainingSeconds) }}
+      </div>
+    </header>
+
+    <p class="hint">Le quiz se soumet automatiquement quand le temps est écoulé.</p>
+
+    <form [formGroup]="form" class="quiz-form" (ngSubmit)="submit()">
+      <ng-container *ngFor="let q of questions; let i = index">
+        <div class="question" [formGroup]="answerGroupAt(i)!">
+
+          <h3>
+            {{ i + 1 }}. {{ q?.questionText }}
+            <small class="mark">({{ q?.mark }} pts)</small>
+          </h3>
+
+          <label class="sr-only" [attr.for]="'ans-'+i">
+            Votre réponse pour la question {{ i + 1 }}
+          </label>
+          <textarea
+            [id]="'ans-'+i"
+            formControlName="userAnswer"
+            rows="3"
+            class="form-control"
+            placeholder="Votre réponse..."
+          ></textarea>
+        </div>
+      </ng-container>
+
+      <div class="actions">
+        <button type="submit" class="btn btn-primary" [disabled]="submitting">
+          {{ submitting ? 'Envoi…' : 'Submit' }}
+        </button>
+        <span class="error" *ngIf="submitError">{{ submitError }}</span>
+      </div>
+    </form>
+  </div>
+
+  <ng-template #loadingOrError>
+    <p *ngIf="!loadError">Chargement des questions…</p>
+    <p class="error" *ngIf="loadError">{{ loadError }}</p>
+    <p *ngIf="!loadError && questions?.length === 0">
+      Aucune question disponible pour ce certificat.
+    </p>
+    <div class="actions" *ngIf="loadError">
+      <button class="btn btn-outline-primary" (click)="resetQuiz()">Réessayer</button>
+    </div>
+  </ng-template>
+</ng-template>

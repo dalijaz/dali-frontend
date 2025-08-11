@@ -1,0 +1,12 @@
+.quiz-wrap { max-width: 900px; margin: 0 auto; padding: 1rem; }
+.quiz-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
+.timer { border:1px solid #ddd; padding:.25rem .5rem; border-radius:8px; font-weight:600; }
+.timer.low { border-color:#d00; }
+.question { margin-bottom:1rem; }
+.question h3 { margin:0 0 .5rem 0; }
+.mark { font-weight:400; color:#666; }
+.actions { margin-top:1rem; display:flex; gap:.75rem; align-items:center; }
+.error { color:#b00020; }
+.result { max-width: 600px; margin: 2rem auto; text-align:center; }
+.status.pass { color: #0a7a0a; }
+.status.fail { color: #b00020; }

@@ -1,0 +1,62 @@
+<h2>Certificates (Admin)</h2>
+
+<!-- Error banner -->
+<div *ngIf="error" class="text-danger" style="margin:.5rem 0">{{ error }}</div>
+
+<!-- Create form -->
+<div style="margin:.5rem 0">
+  <input
+    class="form-control"
+    style="display:inline-block; width:220px; margin-right:.5rem"
+    placeholder="Name"
+    [(ngModel)]="name"
+    name="newName"
+  />
+  <input
+    class="form-control"
+    style="display:inline-block; width:320px; margin-right:.5rem"
+    placeholder="Description"
+    [(ngModel)]="description"
+    name="newDesc"
+  />
+  <button class="btn btn-primary" (click)="create()">Create</button>
+</div>
+
+<!-- List -->
+<ul style="margin-top:1rem">
+  <li *ngFor="let c of certs" style="margin:.35rem 0">
+    <!-- view mode -->
+    <ng-container *ngIf="editing !== c.id; else editBlock">
+      <b>{{ c.name }}</b> — {{ c.description }}
+      <button class="btn btn-sm btn-secondary" style="margin-left:.5rem" (click)="startEdit(c)">Edit</button>
+      <button class="btn btn-sm btn-danger" style="margin-left:.25rem" (click)="remove(c.id!)">Delete</button>
+
+      <!-- NEW: link to the questions editor for this certificate -->
+      <a
+        class="btn btn-sm btn-outline-primary"
+        style="margin-left:.25rem"
+        [routerLink]="['/admin/certificates', c.id, 'questions']"
+      >
+        Edit questions
+      </a>
+    </ng-container>
+
+    <!-- edit mode -->
+    <ng-template #editBlock>
+      <input
+        class="form-control"
+        style="display:inline-block; width:220px; margin-right:.5rem"
+        [(ngModel)]="editName"
+        name="editName{{c.id}}"
+      />
+      <input
+        class="form-control"
+        style="display:inline-block; width:320px; margin-right:.5rem"
+        [(ngModel)]="editDescription"
+        name="editDesc{{c.id}}"
+      />
+      <button class="btn btn-sm btn-primary" (click)="save(c.id!)">Save</button>
+      <button class="btn btn-sm btn-light" style="margin-left:.25rem" (click)="cancel()">Cancel</button>
+    </ng-template>
+  </li>
+</ul>

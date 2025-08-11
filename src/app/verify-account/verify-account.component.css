@@ -1,0 +1,14 @@
+.verify-container {
+  margin-top: 100px;
+  text-align: center;
+}
+
+.status-message {
+  font-size: 1.2rem;
+  color: #28a745; /* Green for success */
+  margin-top: 20px;
+}
+
+.status-message:empty {
+  display: none;
+}

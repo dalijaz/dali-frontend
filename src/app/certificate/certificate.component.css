@@ -1,0 +1,50 @@
+.certificate-list {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.certificate-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.certificate-list li {
+  background: #f1f1f1;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 8px;
+}
+.cert-container {
+  text-align: center;
+  padding: 40px;
+}
+
+.title {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.cert-card {
+  background-color: #f4f4f4;
+  padding: 20px;
+  width: 220px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.cert-card:hover {
+  transform: scale(1.05);
+}
+
+.cert-card h3 {
+  margin-bottom: 10px;
+}

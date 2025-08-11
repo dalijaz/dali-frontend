@@ -1,0 +1,104 @@
+<!-- DEBUG banner to guarantee the template is mounted -->
+<div style="padding:.5rem;border:2px dashed red;margin:.5rem 0;">
+  DEBUG: Admin Questions template loaded
+</div>
+
+<h2>Questions (Admin)</h2>
+
+<!-- Certificate selector -->
+<label>
+  Certificate:
+  <select [(ngModel)]="selectedCertId" (change)="onSelectCertificate()">
+    <option [ngValue]="null">-- choose --</option>
+    <option *ngFor="let c of certificates" [ngValue]="c.id">{{ c.name }}</option>
+  </select>
+</label>
+
+<div *ngIf="loading" style="margin-top:.5rem;">Loading…</div>
+<div *ngIf="!loading && error" class="text-danger" style="margin-top:.5rem;">{{ error }}</div>
+
+<!-- Create new question -->
+<div *ngIf="selectedCertId" style="margin:1rem 0; padding:1rem; border:1px solid #ddd;">
+  <h4>Create Question</h4>
+
+  <div>
+    <input class="form-control" placeholder="Question text" [(ngModel)]="draft.text" name="draftText">
+  </div>
+
+  <div style="margin-top:.5rem; display:grid; grid-template-columns: 1fr 1fr; gap:.5rem;">
+    <input class="form-control" placeholder="Option A" [(ngModel)]="draft.optionA" name="draftA">
+    <input class="form-control" placeholder="Option B" [(ngModel)]="draft.optionB" name="draftB">
+    <input class="form-control" placeholder="Option C" [(ngModel)]="draft.optionC" name="draftC">
+    <input class="form-control" placeholder="Option D" [(ngModel)]="draft.optionD" name="draftD">
+  </div>
+
+  <div style="margin-top:.5rem;">
+    Correct:
+    <select [(ngModel)]="draft.correctIndex" name="draftCorrect">
+      <option [ngValue]="0">A</option>
+      <option [ngValue]="1">B</option>
+      <option [ngValue]="2">C</option>
+      <option [ngValue]="3">D</option>
+    </select>
+
+    &nbsp; Mark:
+    <input type="number" min="1" [(ngModel)]="draft.mark" name="draftMark" style="width:4rem;">
+
+    <button class="btn btn-primary" (click)="create()" style="margin-left:.5rem;">Create</button>
+  </div>
+</div>
+
+<!-- Existing questions -->
+<div *ngIf="!loading && !error && questions.length">
+  <h4>Questions</h4>
+
+  <div *ngFor="let q of questions; trackBy: trackById" style="margin:.5rem 0; padding:.5rem; border:1px solid #eee;">
+    <!-- View mode -->
+    <div *ngIf="editingId !== q.id">
+      <b>Q:</b> {{ q.text }} <br>
+      <div *ngFor="let opt of [q.optionA, q.optionB, q.optionC, q.optionD]; let i = index">
+        <span [style.font-weight]="q.correctIndex === i ? 'bold' : 'normal'">
+          {{ ['A','B','C','D'][i] }}. {{ opt }}
+          <span *ngIf="q.correctIndex === i"> (correct)</span>
+        </span>
+      </div>
+      <div>Mark: {{ q.mark || 1 }}</div>
+      <button class="btn btn-sm btn-secondary" (click)="startEdit(q)">Edit</button>
+      <button class="btn btn-sm btn-danger" (click)="remove(q.id!)">Delete</button>
+    </div>
+
+    <!-- Edit mode -->
+    <div *ngIf="editingId === q.id && editBuffer">
+      <input class="form-control" [(ngModel)]="editBuffer.text" name="editText{{q.id}}" placeholder="Question text">
+
+      <div style="margin-top:.5rem; display:grid; grid-template-columns: 1fr 1fr; gap:.5rem;">
+        <input class="form-control" [(ngModel)]="editBuffer.optionA" name="editA{{q.id}}" placeholder="Option A">
+        <input class="form-control" [(ngModel)]="editBuffer.optionB" name="editB{{q.id}}" placeholder="Option B">
+        <input class="form-control" [(ngModel)]="editBuffer.optionC" name="editC{{q.id}}" placeholder="Option C">
+        <input class="form-control" [(ngModel)]="editBuffer.optionD" name="editD{{q.id}}" placeholder="Option D">
+      </div>
+
+      <div style="margin-top:.5rem;">
+        Correct:
+        <select [(ngModel)]="editBuffer.correctIndex" name="editCorrect{{q.id}}">
+          <option [ngValue]="0">A</option>
+          <option [ngValue]="1">B</option>
+          <option [ngValue]="2">C</option>
+          <option [ngValue]="3">D</option>
+        </select>
+
+        &nbsp; Mark:
+        <input type="number" min="1" [(ngModel)]="editBuffer.mark" name="editMark{{q.id}}" style="width:4rem;">
+      </div>
+
+      <div style="margin-top:.5rem;">
+        <button class="btn btn-sm btn-primary" (click)="saveEdit()">Save</button>
+        <button class="btn btn-sm btn-light" (click)="cancelEdit()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!loading && !error && selectedCertId && questions.length === 0">
+  No questions yet for this certificate.
+</div>

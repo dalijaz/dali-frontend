@@ -1,0 +1,6 @@
+<div *ngIf="verificationStatus">
+  <div [ngClass]="success ? 'alert alert-success' : 'alert alert-danger'">
+    {{ verificationStatus }}
+  </div>
+  <a *ngIf="success" routerLink="/login" class="btn btn-primary mt-2">Go to Login</a>
+</div>

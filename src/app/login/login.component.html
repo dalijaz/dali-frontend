@@ -1,0 +1,16 @@
+<div class="form-container">
+ 
+  <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+  <input type="email" [(ngModel)]="email" name="email" required class="form-control" placeholder="Enter your email">
+  <input type="password" [(ngModel)]="password" name="password" required class="form-control" placeholder="Enter your password">
+  
+  <button type="submit" [disabled]="!loginForm.valid" class="btn btn-primary">Log In</button>
+  
+  <!-- Link to Sign Up page (if user does not have an account) -->
+  <div class="text-center">
+    <p>Don't have an account? <a routerLink="/signup">Create one here</a></p>
+  </div>
+</form>
+
+
+</div>

@@ -1,0 +1,46 @@
+<div class="card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <h5 class="mb-0">My Attempts</h5>
+    <button class="btn btn-sm btn-outline-secondary" (click)="fetch()" [disabled]="loading">
+      Refresh
+    </button>
+  </div>
+
+  <div class="card-body">
+    <div *ngIf="loading" class="text-muted">Loading…</div>
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+    <div *ngIf="!loading && !error && rows.length === 0" class="text-muted">
+      No submissions yet.
+    </div>
+
+    <div class="table-responsive" *ngIf="!loading && !error && rows.length > 0">
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Certificate</th>
+            <th>Score</th>
+            <th>Status</th>
+            <th style="width: 1%"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of rows">
+            <td>{{ r.submittedAt | date:'medium' }}</td>
+            <td>{{ r.certificateName }}</td>
+            <td>{{ r.score }} / {{ r.total }} ({{ percentText(r) }})</td>
+            <td>
+              <span class="badge" [ngClass]="r.passed ? 'text-bg-success' : 'text-bg-danger'">
+                {{ r.passed ? 'Success' : 'Échec' }}
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-primary" (click)="view(r.id)">View</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
