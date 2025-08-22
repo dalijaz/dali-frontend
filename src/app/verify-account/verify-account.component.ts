@@ -8,28 +8,42 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./verify-account.component.css']
 })
 export class VerifyAccountComponent implements OnInit {
-  verificationStatus: string = '';
-  success: boolean = false;
+  verificationStatus = '';
+  success = false;
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
   ngOnInit(): void {
-    const token = this.route.snapshot.queryParamMap.get('token');
+    const status = this.route.snapshot.queryParamMap.get('status');
+    const token  = this.route.snapshot.queryParamMap.get('token'); // fallback support
 
-    if (token) {
-      this.http.get(`http://localhost:8080/auth/verify?token=${token}`, { responseType: 'text' }).subscribe({
-        next: (response: string) => {
-          this.verificationStatus = response;
-          this.success = true;
-        },
-        error: () => {
-          this.verificationStatus = 'Verification failed. The token is invalid or expired.';
-          this.success = false;
-        }
-      });
-    } else {
-      this.verificationStatus = 'No verification token found. Please check your email for the correct link.';
-      this.success = false;  // explicitly set here too
+    // Preferred flow (your backend already does this)
+    if (status) {
+      this.success = status === 'success';
+      this.verificationStatus = this.success
+        ? 'Your email has been verified. You can log in now.'
+        : 'Verification link is invalid or expired.';
+      return;
     }
+
+    // Fallback: if you ever send emails directly to /verify-account?token=...
+    if (token) {
+      this.http.get(`/auth/verify`, { params: { token }, responseType: 'text' })
+        .subscribe({
+          next: () => {
+            this.success = true;
+            this.verificationStatus = 'Your email has been verified. You can log in now.';
+          },
+          error: () => {
+            this.success = false;
+            this.verificationStatus = 'Verification failed. The token is invalid or expired.';
+          }
+        });
+      return;
+    }
+
+    // No status or token
+    this.success = false;
+    this.verificationStatus = 'No verification info found. Please use the link sent to your email.';
   }
 }
