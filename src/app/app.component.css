@@ -1,0 +1,63 @@
+/* Shell */
+.app-container {
+  min-height: 100vh;
+  background: #fafbff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top nav */
+.app-nav {
+  background: #ffffff;
+  border-bottom: 1px solid #e8ecf3;
+  box-shadow: 0 2px 8px rgba(16, 24, 40, .04);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  /* no margins here – avoids top voids */
+}
+
+/* Left side nav links */
+.app-nav .nav-left {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  align-items: center;
+}
+
+.app-nav .nav-left .divider {
+  color: #94a3b8;
+  user-select: none;
+}
+
+.app-nav a {
+  color: #0f172a;
+  text-decoration: none;
+  font-weight: 600;
+}
+.app-nav a:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* Right side (logout) */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn.btn-danger.btn-sm {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.875rem;
+  line-height: 1.2;
+}
+
+/* Routed content area (no global top spacing) */
+.app-main {
+  flex: 1 1 auto;
+  /* no padding-top here; each page handles its own spacing */
+}

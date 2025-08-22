@@ -1,13 +1,21 @@
 .verify-container {
-  margin-top: 100px;
+  max-width: 640px;
+  margin: 120px auto 40px;
   text-align: center;
+  background: #ffffff;
+  border: 1px solid #e8ecf3;
+  border-radius: 18px;
+  padding: 28px 26px;
+  box-shadow: 0 16px 40px rgba(16,24,40,.08);
 }
 
 .status-message {
-  font-size: 1.2rem;
-  color: #28a745; /* Green for success */
-  margin-top: 20px;
+  font-size: 1.1rem;
+  margin-top: 10px;
+  color: #16a34a; /* success */
 }
+
+.status-message.error { color: #b00020; }
 
 .status-message:empty {
   display: none;

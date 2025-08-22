@@ -1,18 +1,36 @@
-<div class="form-container">
-  <h2>Create Account</h2>
+<div class="user-root">
+  <div class="user-scope screen">
+    <div class="card">
+      <div class="logo">
+        <span class="dot"></span>
+        <span class="name">Create account</span>
+      </div>
 
-  <form (ngSubmit)="onSubmit()" #signupForm="ngForm">
-  <input type="email" [(ngModel)]="email" name="email" required class="form-control" placeholder="Enter your email">
-  <input type="password" [(ngModel)]="password" name="password" required class="form-control" placeholder="Enter your password">
-  
-  <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required class="form-control" placeholder="Confirm your password">
-  
-  <button type="submit" [disabled]="!signupForm.valid" class="btn btn-primary">Sign Up</button>
-  
-  <!-- Link to Log In page -->
-  <div class="text-center">
-    <p>Already have an account? <a routerLink="/login">Log in here</a></p>
+      <h1 class="title">Sign up</h1>
+
+      <form (ngSubmit)="onSubmit()">
+        <label class="label" for="email">Email</label>
+        <input id="email" class="input" type="email" [(ngModel)]="email" name="email" required autocomplete="email"/>
+
+        <label class="label" for="password">Password</label>
+        <input id="password" class="input" type="password" [(ngModel)]="password" name="password" required autocomplete="new-password"/>
+
+        <label class="label" for="confirm">Confirm password</label>
+        <input id="confirm" class="input" type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required autocomplete="new-password"/>
+
+        <button class="btn" type="submit">Sign Up</button>
+      </form>
+
+      <div class="helper">
+        Already have an account?
+        <a routerLink="/login" class="link">Log in</a>
+      </div>
+
+      <!-- add the admin switch -->
+      <div class="helper" style="margin-top:6px">
+        Admin?
+        <a routerLink="/admin/login" class="link">Switch to Admin Login</a>
+      </div>
+    </div>
   </div>
-</form>
-
 </div>

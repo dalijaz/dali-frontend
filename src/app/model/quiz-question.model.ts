@@ -2,12 +2,12 @@ import { Certificate } from './certificate.model';
 
 export interface QuizQuestion {
   id?: number;
-  certificate: { id: number } | Certificate;
+  certificate: Pick<Certificate, 'id'>; // always send { id: number }
   text: string;
   optionA: string;
   optionB: string;
   optionC: string;
   optionD: string;
   correctIndex: number; // 0..3
-  mark?: number;
+  mark: number;         // make it required (backend expects a number)
 }

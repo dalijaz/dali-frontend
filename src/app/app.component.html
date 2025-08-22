@@ -8,9 +8,9 @@
     </ul>
   </nav>
 
-  <!-- Router Outlet for routing -->
-  <router-outlet></router-outlet>  <!-- This renders the routed components -->
-  
+  <!-- Routed pages -->
+  <router-outlet></router-outlet>
+
   <!-- Logout Button -->
   <button *ngIf="isLoggedIn()" (click)="logout()" class="btn btn-danger">Logout</button>
 </div>

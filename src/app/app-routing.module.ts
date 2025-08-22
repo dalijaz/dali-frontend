@@ -11,12 +11,13 @@ import { QuizComponent } from './quiz/quiz.component';
 // Admin components
 import { AdminCertificatesComponent } from './admin/admin-certificates.component';
 import { AdminQuestionsComponent } from './admin/admin-questions.component';
+import { AdminLoginComponent } from './admin/admin-login.component';
 
-// NEW: history/detail components
+// NEW: user history/detail
 import { MySubmissionsComponent } from './my-submissions/my-submissions.component';
 import { SubmissionDetailComponent } from './submission-detail/submission-detail.component';
 
-// ✅ Admin guard: derive role from JWT only (do NOT trust stored authRole)
+/* Admin guard: checks JWT payload for ADMIN role */
 export const adminGuard: CanActivateFn = () => {
   const router = inject(Router);
   const token = localStorage.getItem('authToken');
@@ -28,9 +29,7 @@ export const adminGuard: CanActivateFn = () => {
     const padded = b64.padEnd(b64.length + (4 - (b64.length % 4)) % 4, '=');
     const payload = JSON.parse(atob(padded));
 
-    // Adjust claim names if needed:
     const single = (payload.role as string | undefined)?.toUpperCase();
-
     const roles: string[] =
       (payload.roles as string[]) ||
       (payload.authorities as string[]) ||
@@ -39,8 +38,8 @@ export const adminGuard: CanActivateFn = () => {
     const hasAdmin =
       single === 'ADMIN' ||
       single === 'ROLE_ADMIN' ||
-      roles.includes('ADMIN') ||
-      roles.includes('ROLE_ADMIN');
+      roles?.includes('ADMIN') ||
+      roles?.includes('ROLE_ADMIN');
 
     return hasAdmin ? true : router.parseUrl('/');
   } catch {
@@ -51,7 +50,7 @@ export const adminGuard: CanActivateFn = () => {
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 
-  // Public
+  // Public (user)
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'verify-account', component: VerifyAccountComponent },
@@ -60,20 +59,22 @@ const routes: Routes = [
   { path: 'certificates', component: CertificateComponent, canActivate: [AuthGuard] },
   { path: 'quiz/:certificateId', component: QuizComponent, canActivate: [AuthGuard] },
 
-  // NEW: user history/detail
+  // User history/detail
   { path: 'my-submissions', component: MySubmissionsComponent, canActivate: [AuthGuard] },
   { path: 'submissions/:id', component: SubmissionDetailComponent, canActivate: [AuthGuard] },
 
-  // Protected (admin)
+  // Admin
+  { path: 'admin/login', component: AdminLoginComponent },
   { path: 'admin/certificates', component: AdminCertificatesComponent, canActivate: [adminGuard] },
+  { path: 'admin/questions', component: AdminQuestionsComponent, canActivate: [adminGuard] },
   { path: 'admin/certificates/:id/questions', component: AdminQuestionsComponent, canActivate: [adminGuard] },
 
-  // Wildcard
+  // Fallback
   { path: '**', redirectTo: '/login' }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule] // <-- ensures router-outlet/routerLink work
 })
 export class AppRoutingModule {}

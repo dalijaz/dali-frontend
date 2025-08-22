@@ -18,7 +18,7 @@ export class CertificateService {
     if (!token) return undefined;
 
     const h: Record<string, string> = { Authorization: `Bearer ${token}` };
-    // Only needed when calling ngrok
+    // 👇 extra header avoids ngrok browser warning page
     if (environment.apiBaseUrl.includes('ngrok-free.app')) {
       h['ngrok-skip-browser-warning'] = 'true';
     }

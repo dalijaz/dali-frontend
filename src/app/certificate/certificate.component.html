@@ -1,37 +1,30 @@
-<!-- src/app/certificate/certificate.component.html -->
-<div class="cert-container">
-  <h2 class="title">Available Certificates</h2>
+<!-- Viewport-fixed overlay so global layout can't push it down -->
+<div class="user-root">
+  <div class="user-scope shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="dot"></span>
+        <span class="name">Certificates</span>
+      </div>
+      <div class="spacer"></div>
+      <a routerLink="/login" class="ghost">Log out</a>
+    </header>
 
-  <div *ngIf="loading">Loading…</div>
-  <div *ngIf="!loading && loadError" class="error">{{ loadError }}</div>
+    <main class="main">
+      <h1 class="title">Available Certificates</h1>
 
-  <div class="card-container" *ngIf="!loading && certificates.length > 0; else noCerts">
-    <div class="cert-card" *ngFor="let cert of certificates">
-      <h3>{{ cert.name }}</h3>
-      <p>{{ cert.description }}</p>
+      <!-- Grid of certificates -->
+      <div class="grid" *ngIf="$any(this).certificates?.length; else empty">
+        <div class="card" *ngFor="let cert of $any(this).certificates">
+          <div class="card-title">{{ $any(cert).name }}</div>
+          <div class="card-desc">{{ $any(cert).description }}</div>
+          <a class="btn" [routerLink]="['/quiz', $any(cert).id]">Start Quiz</a>
+        </div>
+      </div>
 
-      <!-- Preferred: routerLink, so routing happens even if click handler fails -->
-      <button
-        type="button"
-        class="btn btn-outline-primary"
-        [routerLink]="['/quiz', cert.id]"
-      >
-        Start Quiz
-      </button>
-
-      <!-- Alternative (programmatic):
-      <button
-        type="button"
-        class="btn btn-outline-primary"
-        (click)="goToQuiz(cert.id)"
-      >
-        Start Quiz
-      </button>
-      -->
-    </div>
+      <ng-template #empty>
+        <div class="empty">No certificates found.</div>
+      </ng-template>
+    </main>
   </div>
-
-  <ng-template #noCerts>
-    <p>No certificates found.</p>
-  </ng-template>
 </div>

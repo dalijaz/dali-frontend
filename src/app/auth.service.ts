@@ -25,7 +25,9 @@ export class AuthService {
     localStorage.removeItem('authEmail');
   }
 
-  setToken(token: string): void { localStorage.setItem('authToken', token); }
+  setToken(token: string): void {
+    localStorage.setItem('authToken', token);
+  }
 
   private decodeRoleFromToken(token: string): 'ADMIN' | 'USER' | null {
     try {

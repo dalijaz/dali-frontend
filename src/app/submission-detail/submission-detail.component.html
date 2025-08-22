@@ -1,53 +1,75 @@
-<div class="card" *ngIf="!loading && !error && data">
-  <div class="card-header">
-    <h5 class="mb-1">Submission #{{ data.id }}</h5>
-    <div class="small text-muted">
-      {{ data.submittedAt | date:'medium' }} — {{ data.certificateName }}
+<div class="result-shell">
+  <!-- Header -->
+  <header class="result-header">
+    <div class="left">
+      <span class="dot"></span>
+      <strong>Submission Details</strong>
     </div>
-  </div>
+    <a routerLink="/my-submissions" class="btn btn-outline">My Submissions</a>
+  </header>
 
-  <div class="card-body">
-    <div class="mb-3">
-      <strong>Result:</strong>
-      {{ data.score }} / {{ data.total }} ({{ data.percent | number:'1.0-1' }}%)
-      <span class="badge ms-2" [ngClass]="data.passed ? 'text-bg-success' : 'text-bg-danger'">
-        {{ data.passed ? 'Success' : 'Échec' }}
-      </span>
+  <!-- States -->
+  <div *ngIf="loading" class="muted">Loading…</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <!-- Card -->
+  <section class="result-card" *ngIf="!loading && !error && data as d">
+    <div class="top-meta">
+      <div class="left">
+        <h5>#{{ d.id }} — {{ d.certificateName }}</h5>
+        <small class="when">{{ d.submittedAt | date:'medium' }}</small>
+      </div>
+      <div class="right">
+        <span class="badge" [class.badge-pass]="d.passed" [class.badge-fail]="!d.passed">
+          {{ d.passed ? 'Success' : 'Échec' }}
+        </span>
+      </div>
     </div>
 
-    <div class="list-group">
-      <div class="list-group-item" *ngFor="let a of data.answers; let i = index">
-        <div class="d-flex align-items-start justify-content-between">
-          <div class="me-3">
-            <div class="fw-semibold">Q{{ i + 1 }}. {{ a.text }}</div>
-            <ul class="mb-1">
-              <li [class.fw-semibold]="a.correctIndex === 0">A. {{ a.optionA }}</li>
-              <li [class.fw-semibold]="a.correctIndex === 1">B. {{ a.optionB }}</li>
-              <li [class.fw-semibold]="a.correctIndex === 2">C. {{ a.optionC }}</li>
-              <li [class.fw-semibold]="a.correctIndex === 3">D. {{ a.optionD }}</li>
-            </ul>
-            <div>
-              Your answer:
-              <span class="badge" [ngClass]="answerClass(a.correct)">
-                {{
-                  a.chosenIndex === 0 ? 'A' :
-                  a.chosenIndex === 1 ? 'B' :
-                  a.chosenIndex === 2 ? 'C' :
-                  a.chosenIndex === 3 ? 'D' : '-'
-                }}
-              </span>
-            </div>
-          </div>
-          <div>
-            <span class="badge" [ngClass]="answerClass(a.correct)">
-              {{ a.correct ? 'Correct' : 'Wrong' }}
-            </span>
-          </div>
+    <div class="score-row">
+      <div class="score-box">
+        <div class="n">{{ d.score }}</div>
+        <div class="label">Score</div>
+      </div>
+      <div class="score-box">
+        <div class="n">{{ d.total }}</div>
+        <div class="label">Total</div>
+      </div>
+      <div class="score-box">
+        <div class="n">{{ percentOf(d) | number:'1.0-1' }}%</div>
+        <div class="label">Percent</div>
+      </div>
+    </div>
+
+    <div class="answers">
+      <div class="a-item" *ngFor="let a of d.answers; let i = index">
+        <div class="qline">
+          <span class="qnum">Q{{ i + 1 }}</span>
+          <span class="qtxt">{{ a.text }}</span>
+          <span class="flag" [class.ok]="a.correct" [class.no]="!a.correct">
+            {{ a.correct ? 'Correct' : 'Wrong' }}
+          </span>
+        </div>
+
+        <ul class="opts">
+          <li [class.correct]="a.correctIndex === 0">A. {{ a.optionA }}</li>
+          <li [class.correct]="a.correctIndex === 1">B. {{ a.optionB }}</li>
+          <li [class.correct]="a.correctIndex === 2">C. {{ a.optionC }}</li>
+          <li [class.correct]="a.correctIndex === 3">D. {{ a.optionD }}</li>
+        </ul>
+
+        <div class="your">
+          Your answer:
+          <span class="chip" [class.ok]="a.correct" [class.no]="!a.correct">
+            {{
+              a.chosenIndex === 0 ? 'A' :
+              a.chosenIndex === 1 ? 'B' :
+              a.chosenIndex === 2 ? 'C' :
+              a.chosenIndex === 3 ? 'D' : '-'
+            }}
+          </span>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </div>
-
-<div *ngIf="loading" class="text-muted m-3">Loading…</div>
-<div *ngIf="error" class="alert alert-danger m-3">{{ error }}</div>

@@ -1,0 +1,23 @@
+<!-- Viewport-fixed root so nothing external can push it down -->
+<div class="admin-root">
+  <div class="admin-scope screen">
+    <div class="card">
+      <div class="logo"><span class="dot"></span><span class="name">Admin</span></div>
+      <h1 class="title">Sign in to Dashboard</h1>
+
+      <div *ngIf="error" class="error">{{ error }}</div>
+
+      <label class="label" for="email">Email</label>
+      <input id="email" class="input" type="email" [(ngModel)]="email" name="email" />
+
+      <label class="label" for="password">Password</label>
+      <input id="password" class="input" type="password" [(ngModel)]="password" name="password" />
+
+      <button class="btn" (click)="login()">Log In</button>
+
+      <div class="helper">
+        Not an admin? <a routerLink="/login" class="link">Switch to User Login</a>
+      </div>
+    </div>
+  </div>
+</div>

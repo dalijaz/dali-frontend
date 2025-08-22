@@ -30,5 +30,18 @@ export class SubmissionDetailComponent implements OnInit {
     });
   }
 
-  answerClass(correct: boolean) { return correct ? 'text-bg-success' : 'text-bg-danger'; }
+  /** Helper used by template to compute percent safely (silences the warning) */
+  percentOf(d: SubmissionDetailDTO): number {
+    // prefer server-provided percent if present
+    const p = (d as any).percent;
+    if (p !== null && p !== undefined) return Number(p);
+
+    const total = Number((d as any).total ?? 0);
+    const score = Number((d as any).score ?? 0);
+    return total ? (score / total) * 100 : 0;
+  }
+
+  answerClass(correct: boolean) {
+    return correct ? 'text-bg-success' : 'text-bg-danger';
+  }
 }
