@@ -1,3 +1,4 @@
+// src/app/app-routing.module.ts
 import { NgModule, inject } from '@angular/core';
 import { RouterModule, Routes, CanActivateFn, Router } from '@angular/router';
 
@@ -13,7 +14,7 @@ import { AdminCertificatesComponent } from './admin/admin-certificates.component
 import { AdminQuestionsComponent } from './admin/admin-questions.component';
 import { AdminLoginComponent } from './admin/admin-login.component';
 
-// NEW: user history/detail
+// User history/detail
 import { MySubmissionsComponent } from './my-submissions/my-submissions.component';
 import { SubmissionDetailComponent } from './submission-detail/submission-detail.component';
 
@@ -50,16 +51,17 @@ export const adminGuard: CanActivateFn = () => {
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 
-  // Public (user)
+  // Public
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'verify-account', component: VerifyAccountComponent },
 
   // Protected (user)
   { path: 'certificates', component: CertificateComponent, canActivate: [AuthGuard] },
+  { path: 'certificates/:id', component: CertificateComponent, canActivate: [AuthGuard] }, // <-- detail route
   { path: 'quiz/:certificateId', component: QuizComponent, canActivate: [AuthGuard] },
 
-  // User history/detail
+  // User submissions
   { path: 'my-submissions', component: MySubmissionsComponent, canActivate: [AuthGuard] },
   { path: 'submissions/:id', component: SubmissionDetailComponent, canActivate: [AuthGuard] },
 
@@ -75,6 +77,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule] // <-- ensures router-outlet/routerLink work
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}

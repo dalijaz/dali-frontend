@@ -1,4 +1,4 @@
 export const environment = {
-  production: true,
-  apiBaseUrl: 'https://7ac42e223bdf.ngrok-free.app' // backend tunnel (:8080)
+  production: false,
+  apiBaseUrl: 'https://11c79ff5e909.ngrok-free.app'  // backend tunnel (:8080)
 };

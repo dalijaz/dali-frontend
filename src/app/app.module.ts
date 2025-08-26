@@ -10,7 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { CertificateComponent } from './certificate/certificate.component';
 import { VerifyAccountComponent } from './verify-account/verify-account.component';
-import { QuizComponent } from './quiz/quiz.component';             // <-- make sure path & export match
+import { QuizComponent } from './quiz/quiz.component';
 import { MySubmissionsComponent } from './my-submissions/my-submissions.component';
 import { SubmissionDetailComponent } from './submission-detail/submission-detail.component';
 
@@ -30,11 +30,11 @@ import { JwtInterceptor } from './jwt-interceptor';
   ],
   imports: [
     BrowserModule,
-    CommonModule,          // <-- date/number pipes + ngClass
-    FormsModule,           // <-- ngModel
+    CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    AppRoutingModule       // <-- exports RouterModule for routerLink
+    AppRoutingModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }

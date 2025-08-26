@@ -1,8 +1,9 @@
 // src/app/certificate/certificate.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CertificateService } from '../certificate.service';  // service is one level up from /certificate/
-import { Certificate } from '../model/certificate.model';
+
+import { CertificateService } from '../certificate.service';
+import { Certificate } from '../model/certificate.model'; // <-- correct import
 
 @Component({
   selector: 'app-certificate',

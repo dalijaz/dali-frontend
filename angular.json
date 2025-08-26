@@ -67,8 +67,10 @@
           "options": {
             "host": "0.0.0.0",
             "port": 4200,
-            "publicHost": "1e81b78939a8.ngrok-free.app",
-            "allowedHosts": ["1e81b78939a8.ngrok-free.app"]
+            "publicHost": "localhost:4200",
+            "allowedHosts": [
+              ".ngrok-free.app"
+            ]
           },
           "configurations": {
             "production": {

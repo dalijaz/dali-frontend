@@ -1,4 +1,5 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:8080'
+  // Use the BACKEND ngrok URL so phones/other PCs can reach your API
+  apiBaseUrl: 'https://11c79ff5e909.ngrok-free.app'
 };
