@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-import { environment } from '../environments/environment';
 
 interface LoginResponse {
   token: string;
@@ -11,10 +10,9 @@ interface LoginResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private baseUrl = `${environment.apiBaseUrl}/auth`;
-
   constructor(private http: HttpClient) {}
 
+  // ---------- Session helpers ----------
   isAuthenticated(): boolean {
     return !!localStorage.getItem('authToken');
   }
@@ -23,10 +21,6 @@ export class AuthService {
     localStorage.removeItem('authToken');
     localStorage.removeItem('authRole');
     localStorage.removeItem('authEmail');
-  }
-
-  setToken(token: string): void {
-    localStorage.setItem('authToken', token);
   }
 
   private decodeRoleFromToken(token: string): 'ADMIN' | 'USER' | null {
@@ -61,12 +55,38 @@ export class AuthService {
 
   isAdmin(): boolean { return this.getRole() === 'ADMIN'; }
 
-  signup(credentials: { email: string; password: string }): Observable<any> {
-    return this.http.post(`${this.baseUrl}/signup`, credentials, { responseType: 'text' });
+  // ---------- API calls (relative paths; interceptor rebases to backend) ----------
+
+  /** Public: create account. Expects JSON: { message?, email?, id? } */
+  signup(body: { email: string; password: string }) {
+    return this.http.post<{ message?: string; email?: string; id?: number }>(
+      '/auth/signup', body
+    );
   }
 
-  login(credentials: { email: string; password: string }): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, credentials).pipe(
+  /** Public: user login. Stores token/role/email on success. */
+  login(body: { email: string; password: string }): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>('/auth/login', body).pipe(
+      tap((res) => {
+        if (!res?.token) return;
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('authRole');
+        localStorage.removeItem('authEmail');
+
+        localStorage.setItem('authToken', res.token);
+        if (res.email) localStorage.setItem('authEmail', res.email);
+
+        const roleFromApi = (res.role || '').toUpperCase().replace(/^ROLE_/, '');
+        const roleFromJwt = this.decodeRoleFromToken(res.token);
+        const role = (roleFromApi || roleFromJwt || null) as 'ADMIN' | 'USER' | null;
+        if (role) localStorage.setItem('authRole', role);
+      })
+    );
+  }
+
+  /** Public: admin login. Stores token/role/email on success. */
+  adminLogin(body: { email: string; password: string }): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>('/auth/admin/login', body).pipe(
       tap((res) => {
         if (!res?.token) return;
         localStorage.removeItem('authToken');

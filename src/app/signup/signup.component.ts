@@ -12,6 +12,8 @@ export class SignupComponent implements AfterViewInit, OnDestroy {
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
+  loading = false;
+  error = '';
 
   constructor(
     private router: Router,
@@ -72,24 +74,35 @@ export class SignupComponent implements AfterViewInit, OnDestroy {
   }
 
   onSubmit(): void {
+    if (this.loading) return;
+    this.error = '';
+
+    if (!this.email || !this.password) {
+      alert('Email and password are required.');
+      return;
+    }
     if (this.password !== this.confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
 
+    this.loading = true;
     const userData = { email: this.email, password: this.password };
 
     this.authService.signup(userData).subscribe({
-      next: () => {
-        alert('Signup successful! Please check your email to verify your account.');
-        this.router.navigate(['/login']);
+      next: (res) => {
+        this.loading = false;
+        alert(res?.message || 'Signup successful! Please check your email to verify your account.');
+        this.router.navigate(['/login']); // navigate AFTER success
       },
       error: (err) => {
-        if (err.status === 400) {
-          alert('User already exists!');
+        this.loading = false;
+        if (err?.status === 400) {
+          alert(typeof err.error === 'string' ? err.error : 'User already exists!');
         } else {
-          alert('Signup failed. Try again.');
+          alert(typeof err?.error === 'string' ? err.error : 'Signup failed. Try again.');
         }
+        console.error('Signup error:', err);
       }
     });
   }

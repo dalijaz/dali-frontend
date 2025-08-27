@@ -1,1 +1,233 @@
-/* You can add global styles to this file, and also import other style files */
+/* Reset + host */
+:host { display: contents; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #0c1020;
+  color: #e7ecfa;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Reset lists & links */
+ul, ol { margin: 0; padding: 0; list-style: none; }
+a { text-decoration: none; color: inherit; }
+
+/* ========================= */
+/* GLOBAL TYPOGRAPHY FIXES   */
+/* ========================= */
+h1, h2, h3,
+.h1, .h2, .h3,
+.panel-title, .card-title, .title {
+  color: #e7ecfa !important;   /* bright heading text */
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+.text-muted, .text-body-secondary {
+  color: #9aa7c7 !important;
+  opacity: 1 !important;
+}
+
+/* Strong title utility */
+.strong-title {
+  color: #e7ecfa !important;
+  opacity: 1 !important;
+}
+
+/* ========================= */
+/* LAYOUT / APP SHELL        */
+/* ========================= */
+.admin-root {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  overflow: auto;
+  background: #0c1020;
+  color: #e7ecfa;
+}
+
+.admin-scope.shell {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100%;
+}
+
+/* Sidebar */
+.sidebar {
+  padding: 20px;
+  border-right: 1px solid rgba(255,255,255,.07);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+.brand .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(180deg,#6da1ff,#7db3ff);
+  box-shadow: 0 0 10px rgba(109,161,255,.6);
+}
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+.nav .item, .nav a.item {
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #c7d2f7;
+}
+.nav .item:hover, .nav a.item:hover { background: rgba(255,255,255,.06); }
+.nav .item.active { background: rgba(109,161,255,.16); color: #fff; }
+
+/* Main */
+.main { padding: 20px 24px; }
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.title { font-size: 20px; font-weight: 800; }
+.search {
+  background: #0f1526;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px;
+  padding: 8px 10px;
+  outline: none;
+  color: #e9eefb;
+}
+
+/* ========================= */
+/* BUTTONS                   */
+/* ========================= */
+.btn {
+  background: linear-gradient(180deg,#6da1ff,#7db3ff);
+  border: none;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.btn.small { padding: 6px 10px; border-radius: 10px; }
+.btn.danger { background: #d9534f; }
+.btn.ghost {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.18);
+  color: #e7ecfa;
+}
+
+/* ========================= */
+/* KPI PANELS                */
+/* ========================= */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 10px;
+  margin: 10px 0 16px;
+}
+.kpi {
+  background: linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  padding: 14px;
+}
+.kpi .label { color: #9aa7c7; font-size: 12px; }
+.kpi .value { font-size: 22px; font-weight: 800; margin-top: 4px; }
+
+/* ========================= */
+/* PANELS / CARDS            */
+/* ========================= */
+.panel, .card, .auth-card {
+  background: linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  color: #e7ecfa;
+}
+.panel.error-panel {
+  border-color: rgba(255,107,107,.35);
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.panel-title {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  font-weight: 700;
+}
+
+/* Ensure login/signup cards are darker */
+.auth-card, .card {
+  background: rgba(15, 21, 38, 0.95) !important;
+}
+
+/* ========================= */
+/* TABLE OVERRIDES           */
+/* ========================= */
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  background: transparent !important;
+  color: #e7ecfa !important;
+}
+.table thead th {
+  background: #0f1526 !important;
+  color: #9aa7c7 !important;
+  border-bottom: 1px solid rgba(255,255,255,.08) !important;
+  text-align: left;
+  font-weight: 600;
+  padding: 6px 8px;
+}
+.table tbody tr {
+  background: rgba(255,255,255,.03) !important;
+}
+.table tbody td {
+  padding: 10px 8px;
+  border-top: 1px solid rgba(255,255,255,.07) !important;
+  border-bottom: 1px solid rgba(255,255,255,.07) !important;
+  color: #e7ecfa !important;
+}
+.table tbody tr:hover {
+  background: rgba(109,161,255,.08) !important;
+}
+
+/* ========================= */
+/* BADGES / FORMS            */
+/* ========================= */
+.row-actions { display: flex; gap: 6px; justify-content: flex-end; }
+.badge {
+  display: inline-block;
+  background: rgba(109,161,255,.18);
+  border: 1px solid rgba(109,161,255,.35);
+  color: #cfe0ff;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+.edit-row { display: flex; gap: 8px; align-items: center; }
+.input {
+  background: #0f1526;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px;
+  padding: 8px 10px;
+  color: #e9eefb;
+  outline: none;
+}
+.time-row { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
+.small-input { width: 5.5rem; }
+.empty {
+  padding: 16px;
+  color: #9aa7c7;
+  background: rgba(255,255,255,.02);
+  border: 1px solid rgba(255,255,255,.05);
+  border-radius: 10px;
+}

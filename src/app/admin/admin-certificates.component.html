@@ -1,20 +1,27 @@
 <div class="admin-root">
   <div class="admin-scope shell">
+    <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="brand"><span class="dot"></span><span class="name">Admin</span></div>
+      <div class="brand">
+        <span class="dot"></span>
+        <span class="name">Admin</span>
+      </div>
+
       <nav class="nav">
         <div class="item active">Certificates</div>
         <a class="item" routerLink="/admin/questions">Questions</a>
       </nav>
     </aside>
 
+    <!-- Main -->
     <main class="main">
       <div class="topbar">
-        <h1 class="title">Certificates (Admin)</h1>
+        <h1 class="title strong-title">Certificates (Admin)</h1>
         <div class="spacer"></div>
+
         <input class="search" placeholder="Name" [(ngModel)]="name" name="newName" />
         <input class="search" placeholder="Description" [(ngModel)]="description" name="newDesc" />
-        <button class="btn btn-primary" (click)="create()">Create</button>
+        <button class="btn" (click)="create()">Create</button>
       </div>
 
       <div *ngIf="error" class="panel error-panel">
@@ -22,6 +29,7 @@
         <div class="text-danger">{{ error }}</div>
       </div>
 
+      <!-- KPIs -->
       <section class="kpis">
         <div class="kpi"><div class="label">Total Certificates</div><div class="value">{{ totalCount }}</div></div>
         <div class="kpi"><div class="label">With Timer</div><div class="value">{{ timedCount }}</div></div>
@@ -29,6 +37,7 @@
         <div class="kpi"><div class="label">Attempts (7d)</div><div class="value">{{ attempts7d }}</div></div>
       </section>
 
+      <!-- List -->
       <section class="panel">
         <h3 class="panel-title">List</h3>
 
@@ -38,10 +47,16 @@
 
         <table class="table" *ngIf="certs?.length; else empty">
           <thead>
-            <tr><th style="width:22%">Name</th><th style="width:38%">Description</th><th style="width:20%">Quiz Time</th><th style="width:20%"></th></tr>
+            <tr>
+              <th style="width:22%">Name</th>
+              <th style="width:38%">Description</th>
+              <th style="width:20%">Quiz Time</th>
+              <th style="width:20%"></th>
+            </tr>
           </thead>
           <tbody>
             <ng-container *ngFor="let c of certs">
+              <!-- Normal row -->
               <tr *ngIf="editing !== c.id; else editRow">
                 <td><strong>{{ c.name }}</strong></td>
                 <td>{{ c.description }}</td>
@@ -59,6 +74,21 @@
                 </td>
               </tr>
 
+              <!-- Separate time editor row -->
+              <tr *ngIf="editingTime === c.id">
+                <td colspan="4">
+                  <div class="time-row">
+                    <label>Time (minutes):</label>
+                    <input class="input small-input" type="number" min="1"
+                           [(ngModel)]="timeMinutes" name="minutes{{c.id}}" />
+                    <button class="btn small" (click)="saveTime(c.id!)"
+                            [disabled]="!timeMinutes || timeMinutes < 1">Save</button>
+                    <button class="btn small ghost" (click)="cancelEditTime()">Cancel</button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Edit name/desc row -->
               <ng-template #editRow>
                 <tr>
                   <td colspan="4">
@@ -68,13 +98,6 @@
                       <button class="btn small" (click)="save(c.id!)">Save</button>
                       <button class="btn small ghost" (click)="cancel()">Cancel</button>
                     </div>
-
-                    <div *ngIf="editingTime === c.id" class="time-row">
-                      <label>Time (minutes):</label>
-                      <input class="input small-input" type="number" min="1" [(ngModel)]="timeMinutes" name="minutes{{c.id}}" />
-                      <button class="btn small" (click)="saveTime(c.id!)">Save</button>
-                      <button class="btn small ghost" (click)="cancelEditTime()">Cancel</button>
-                    </div>
                   </td>
                 </tr>
               </ng-template>
@@ -82,6 +105,10 @@
           </tbody>
         </table>
       </section>
+
+      <div style="margin-top:14px">
+        <button class="btn ghost" style="width:100%" (click)="logout()">Logout</button>
+      </div>
     </main>
   </div>
 </div>
